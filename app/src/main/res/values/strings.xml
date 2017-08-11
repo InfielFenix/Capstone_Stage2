@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Shooker</string>
+    <string name="action_sort">Sort by</string>
+    <string name="tab_shopping_list">SHOPPING LIST</string>
+    <string name="tab_recipes">RECIPES</string>
+    <string name="recipe_image">Recipe Image</string>
+    <string name="empty_view_no_recipes">No Recipes …</string>
+
+    <string name="add_new_recipe">Add New Recipe</string>
+    <string name="edit_recipe">Edit Recipe</string>
+    <string name="save">save</string>
+    <string name="delete_recipe">Delete Recipe</string>
+    <string name="step">Step</string>
+    <string name="share_shopping_list">Share Shopping List</string>
+    <string name="title">Title</string>
+    <string name="duration">Duration</string>
+    <string name="steps">Steps</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="amount">Amount</string>
+    <string name="ingredient">Ingredient</string>
+    <string name="make_a_picture">make a picture</string>
+    <string name="recipe">Recipe</string>
+    <string name="create_recipe">Create Recipe</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="add_to_shopping_cart">Add Ingredients to Shopping Cart</string>
+    <string name="minutes_short"> min</string>
+
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ga_trackingId" translatable="false">AIzaSyDI5brhM_e81WT6eU8fFfFk1QA6pKP8Z4k</string>
+
+    <string-array name="difficulty_values">
+        <item>BEGINNER</item>
+        <item>NORMAL</item>
+        <item>PROFI</item>
+    </string-array>
+
+    <string-array name="unit_values">
+        <item>G</item>
+        <item>KG</item>
+        <item>TBSP</item>
+        <item>TSP</item>
+        <item>ML</item>
+        <item>CUP</item>
+        <item>L</item>
+    </string-array>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="recipe_photo_transition">recipe_photo_transition</string>
+    <string name="recipe_deleted">Recipe successfully deleted</string>
+    <string name="recipe_saved">Recipe successfully saved</string>
+    <string name="shopping_list">Shooker Shopping List</string>
+</resources>

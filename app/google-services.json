@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "282941023857",
+    "firebase_url": "https://shooker-3e0e8.firebaseio.com",
+    "project_id": "shooker-3e0e8",
+    "storage_bucket": "shooker-3e0e8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282941023857:android:6f0d85bf17b4355e",
+        "android_client_info": {
+          "package_name": "com.projects.alexanderauer.shooker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282941023857-hdf0ifq1ppfh2t7sjall35ml4a4kacrc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgJ6FiQqE7Psa4QSpqrV8PJQ6Bd0agY0k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
