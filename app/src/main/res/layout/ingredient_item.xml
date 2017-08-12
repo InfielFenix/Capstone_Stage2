@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/ingredient_list_item_height"
     android:orientation="horizontal"
-    android:padding="@dimen/default_view_margin">
+    android:padding="@dimen/default_view_vertical_margin">
 
     <TextView
         android:id="@+id/id"
