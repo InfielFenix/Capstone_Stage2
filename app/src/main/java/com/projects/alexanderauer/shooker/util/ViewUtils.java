@@ -13,7 +13,8 @@ import com.projects.alexanderauer.shooker.data.Step;
 import java.util.Arrays;
 
 /**
- * Created by Alex on 02.08.2017.
+ * Utility class to convert Ingredient and Step objects into Views.
+ * This is needed in the Recipe-Edit fragment.
  */
 
 public class ViewUtils {
@@ -42,7 +43,7 @@ public class ViewUtils {
         sUnit.setSelection(Arrays.asList(context.getResources().getStringArray(R.array.unit_values))
                 .indexOf(ingredient.getUnit()));
 
-        // set ingredient name
+        // set Ingredient name
         TextView tvIngredient = ingredientItemView.findViewById(R.id.ingredient);
         tvIngredient.setText(ingredient.getIngredient());
 
@@ -56,9 +57,11 @@ public class ViewUtils {
     public static View getStepItemViewFromStep(Context context, Step step) {
         View stepItemView = getStepItemView(context);
 
+        // set id (technical field)
         TextView tvId = stepItemView.findViewById(R.id.id);
         tvId.setText(Long.toString(step.getId()));
 
+        // set Step description
         TextView tvStep = stepItemView.findViewById(R.id.step);
         tvStep.setText(step.getStep());
 

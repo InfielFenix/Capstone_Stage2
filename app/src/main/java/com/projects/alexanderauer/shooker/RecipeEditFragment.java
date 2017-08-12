@@ -43,7 +43,8 @@ import java.util.Locale;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * A simple {@link Fragment} subclass.
+ * The fragment that provides Recipe creation and editing.
+ * <p>
  * Use the {@link RecipeEditFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -88,6 +89,7 @@ public class RecipeEditFragment extends Fragment {
             mRecipe = getArguments().getParcelable(ARG_RECIPE);
         }
 
+        // set title depending on whether a Recipe got passed or not
         if (mRecipe == null) {
             mRecipe = new Recipe();
             getActivity().setTitle(getString(R.string.create_recipe));
@@ -99,6 +101,7 @@ public class RecipeEditFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // inflate fragment specific menu
         inflater.inflate(R.menu.menu_recipe_edit, menu);
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -108,8 +111,10 @@ public class RecipeEditFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save: {
+                // get the new Recipe data from the View elements
                 Recipe recipe = getData();
                 if (recipe != null)
+                    // pass the Save event to the activity
                     mRecipeSaveListener.onClickSaveRecipe(recipe);
                 return true;
             }
@@ -123,10 +128,12 @@ public class RecipeEditFragment extends Fragment {
                              Bundle savedInstanceState) {
         View recipeEditView = inflater.inflate(R.layout.fragment_recipe_edit, container, false);
 
+        // set own toolbar
         getActivityCast().setSupportActionBar(((Toolbar) recipeEditView.findViewById(R.id.toolbar_recipe_edit)));
         getActivityCast().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getActivityCast().getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
 
+        // start camera intent when pressing on the camera image
         recipeEditView.findViewById(R.id.camera_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,7 +167,7 @@ public class RecipeEditFragment extends Fragment {
             // set title
             mTitle.setText(mRecipe.getTitle());
 
-            // set recipe photo
+            // load recipe photo via Picasso
             if (mRecipe.getPhotoUrl() != null && !mRecipe.getPhotoUrl().equals(""))
                 Picasso.with(getContext())
                         .load(Uri.fromFile(new File(mRecipe.getPhotoUrl())))
@@ -188,6 +195,7 @@ public class RecipeEditFragment extends Fragment {
                 mStepContainer.addView(ViewUtils.getStepItemViewFromStep(getContext(), step));
         }
 
+        // finally add an empty row for Ingredients and Steps
         addNewEmptyIngredient();
         addNewEmptyStep();
 
@@ -195,16 +203,20 @@ public class RecipeEditFragment extends Fragment {
     }
 
     public Recipe getData() {
+        // at least the title of the Recipe has to be filled
         if (mTitle.getText().toString().equals("")) {
             Toast.makeText(getContext(), R.string.obligatory_field_check_message, Toast.LENGTH_SHORT).show();
             return null;
         } else {
+            // set title in the Recipe object
             mRecipe.setTitle(mTitle.getText().toString());
             try {
+                // set duration in the Recipe object
                 mRecipe.setDuration(Integer.parseInt(mDuration.getText().toString()));
             } catch (NumberFormatException nfe) {
                 Log.w("NumberFormatException", nfe.getMessage());
             }
+            // set difficulty in the Recipe object
             mRecipe.setDifficulty(mDifficulty.getSelectedItem().toString());
 
             // clear and add new ingredients
@@ -214,19 +226,27 @@ public class RecipeEditFragment extends Fragment {
 
                 Ingredient ingredient = new Ingredient();
 
+                // set id in the Ingredient object
                 String _id = ((TextView) child.findViewById(R.id.id)).getText().toString();
                 if (!_id.equals(""))
                     ingredient.setId(Long.valueOf(_id));
 
+                // set id of Recipe in the Ingredient object
                 ingredient.setRecipeId(mRecipe.getId());
                 try {
+                    // set amount in the Ingredient object
                     ingredient.setAmount(Double.parseDouble(((TextView) child.findViewById(R.id.amount)).getText().toString()));
                 } catch (NumberFormatException nfe) {
                     Log.w("NumberFormatException", nfe.getMessage());
                 }
+
+                // set unit in the Ingredient object
                 ingredient.setUnit(((Spinner) child.findViewById(R.id.unit)).getSelectedItem().toString());
+
+                // set name in the Ingredient object
                 ingredient.setIngredient(((TextView) child.findViewById(R.id.ingredient)).getText().toString());
 
+                // add only if amount and name are not empty
                 if (ingredient.getAmount() > 0 && !ingredient.getIngredient().equals(""))
                     mRecipe.getIngredients().add(ingredient);
             }
@@ -238,13 +258,18 @@ public class RecipeEditFragment extends Fragment {
 
                 Step step = new Step(((TextView) child.findViewById(R.id.step)).getText().toString());
 
+                // set id in the Step object
                 String _id = ((TextView) child.findViewById(R.id.id)).getText().toString();
                 if (!_id.equals(""))
                     step.setId(Long.valueOf(_id));
 
+                // set Recipe id in the Step object
                 step.setRecipeId(mRecipe.getId());
+
+                // set sequence number in the Step object
                 step.setSequence(i);
 
+                // add only if Step description is not empty
                 if (!step.getStep().equals(""))
                     mRecipe.getSteps().add(step);
             }
@@ -253,9 +278,13 @@ public class RecipeEditFragment extends Fragment {
         }
     }
 
+    /**
+     * Method to add new empty Ingredient input view
+     */
     private void addNewEmptyIngredient() {
         View ingredientView = ViewUtils.getIngredientItemView(getContext());
 
+        // listen to a text change event of the amount input field
         EditText etAmount = ingredientView.findViewById(R.id.amount);
         etAmount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -276,10 +305,15 @@ public class RecipeEditFragment extends Fragment {
         mIngredientContainer.addView(ingredientView);
     }
 
+    /**
+     * Method to add new empty Step input view
+     */
     private void addNewEmptyStep() {
         View stepView = ViewUtils.getStepItemView(getContext());
 
         EditText etStep = stepView.findViewById(R.id.step);
+
+        // listen to a text change event of the step input field
         etStep.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -301,6 +335,7 @@ public class RecipeEditFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // get the result of the camera intent
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             mRecipe.setPhotoUrl(mCurrentPhotoPath);
             mPhoto.setAlpha(1.0f);
@@ -310,6 +345,12 @@ public class RecipeEditFragment extends Fragment {
         }
     }
 
+    /**
+     * Create image file on the device storage
+     *
+     * @return File
+     * @throws IOException
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
@@ -326,6 +367,7 @@ public class RecipeEditFragment extends Fragment {
         return image;
     }
 
+    // cast activity to RecipeDetailActivity
     private RecipeDetailActivity getActivityCast() {
         return (RecipeDetailActivity) getActivity();
     }
@@ -341,6 +383,9 @@ public class RecipeEditFragment extends Fragment {
         }
     }
 
+    /**
+     * Interface to pass the Save event to the activity
+     */
     public interface OnRecipeSaveListener {
         void onClickSaveRecipe(Recipe recipe);
     }

@@ -5,7 +5,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by Alex on 04.08.2017.
+ * Entity class for Steps. It provides getter and setter for all attributes and
+ * a constructor which creates Steps out of Cursor objects.
+ * Furthermore it implements the Parcelable interface to pass the objects between activities.
  */
 
 public class Step implements Parcelable{
@@ -23,6 +25,7 @@ public class Step implements Parcelable{
         setStep(step);
     }
 
+    // create Step out of a Cursor object
     public Step(Cursor cursor) {
         setId(cursor.getLong(StepLoader.Query._ID));
         setRecipeId(cursor.getLong(StepLoader.Query.RECIPE_ID));

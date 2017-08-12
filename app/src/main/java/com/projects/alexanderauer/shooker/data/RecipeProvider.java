@@ -10,7 +10,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
- * Created by Alex on 30.07.2017.
+ * Provider class for Recipes, Ingredients and Steps.
+ * Note: This class is only used to query the tables. The ContentProvider doesn't support
+ * CUD-operations.
  */
 
 public class RecipeProvider extends ContentProvider {
@@ -34,6 +36,7 @@ public class RecipeProvider extends ContentProvider {
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+        // Uri patterns for all necessary operations
         matcher.addURI(CONTENT_AUTHORITY, "recipes", RECIPES);
         matcher.addURI(CONTENT_AUTHORITY, "recipes/#", RECIPES_ID);
         matcher.addURI(CONTENT_AUTHORITY, "ingredients", INGREDIENTS);
@@ -60,6 +63,7 @@ public class RecipeProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         Cursor cursor;
 
+        // match Uri and execute appropriate method
         switch (sUriMatcher.match(uri)) {
             case RECIPES_ID: {
                 String recipeId = uri.getLastPathSegment();

@@ -40,6 +40,7 @@ public class ShoppingListAdapter extends ArrayAdapter<Ingredient> {
             public void onClick(View view) {
                 ingredient.setChecked(!ingredient.isChecked());
 
+                // save checked state in db
                 Intent recipeOperationsIntent = new Intent(parent.getContext(), RecipeOperationIntentService.class);
                 recipeOperationsIntent.putExtra(RecipeOperationIntentService.EXTRA_INGREDIENT,ingredient);
                 recipeOperationsIntent.setAction(RecipeOperationIntentService.ACTION_UPDATE_INGREDIENT);

@@ -33,7 +33,10 @@ import java.io.File;
 import java.util.Locale;
 
 /**
- * A simple {@link Fragment} subclass.
+ * The fragment that contains the Recipe details.
+ * It provides functionality to switch to the Recipe editing fragment
+ * and to delete the Recipe.
+ *
  * Use the {@link RecipeDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -83,6 +86,7 @@ public class RecipeDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View recipeDetailView = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
 
+        // set own toolbar
         getActivityCast().setSupportActionBar(((Toolbar) recipeDetailView.findViewById(R.id.toolbar_recipe_detail)));
         getActivityCast().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -96,7 +100,8 @@ public class RecipeDetailFragment extends Fragment {
             collapsingToolbarLayout.setExpandedTitleColor(Color.WHITE);
             collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
 
-            // set recipe photo
+            // PaletteAsyncListener which is used to set suitable colors to the
+            // CollapsingToolbarLayout after Picasso has loaded the image
             final Palette.PaletteAsyncListener paletteListener = new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
@@ -118,6 +123,7 @@ public class RecipeDetailFragment extends Fragment {
                 }
             };
 
+            // load photo via Picasso
             if (mRecipe.getPhotoUrl() != null && !mRecipe.getPhotoUrl().equals("")) {
                 Picasso.with(getContext())
                         .load(Uri.fromFile(new File(mRecipe.getPhotoUrl())))
@@ -208,6 +214,7 @@ public class RecipeDetailFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // inflate fragment specific menu
         inflater.inflate(R.menu.menu_recipe_detail, menu);
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -217,6 +224,7 @@ public class RecipeDetailFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete: {
+                // pass Recipe deletion event to the activity
                 mRecipeDeleteListener.onClickDeleteRecipe();
                 return true;
             }
@@ -226,6 +234,7 @@ public class RecipeDetailFragment extends Fragment {
     }
 
     private void setShoppingCartColor(ImageView shoppingCart, boolean active) {
+        // set color of shopping cart image
         if (active) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 shoppingCart.setColorFilter(getActivity().getColor(R.color.colorAccent));
@@ -251,6 +260,10 @@ public class RecipeDetailFragment extends Fragment {
         }
     }
 
+    /**
+     * Interface which has to be implemented by the Activity to get the
+     * Recipe deletion events
+     */
     public interface OnRecipeDeleteListener {
         void onClickDeleteRecipe();
     }

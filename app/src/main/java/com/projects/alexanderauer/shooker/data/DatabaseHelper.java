@@ -5,7 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by Alex on 30.07.2017.
+ * Database helper class to create and drop the database tables
+ * for recipes, ingredients and steps.
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -47,6 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        // drop and recreate tables
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RecipeProvider.Tables.RECIPES);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RecipeProvider.Tables.INGREDIENTS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RecipeProvider.Tables.STEPS);

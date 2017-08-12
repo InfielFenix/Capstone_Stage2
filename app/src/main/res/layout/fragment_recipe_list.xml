@@ -9,10 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="28dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="16dp"
+        android:paddingBottom="@dimen/recipe_list_margin_bottom"
+        android:paddingLeft="@dimen/default_view_margin"
+        android:paddingRight="@dimen/default_view_margin"
+        android:paddingTop="@dimen/default_view_vertical_margin"
         android:scrollbarStyle="outsideOverlay" />
 
     <TextView

@@ -3,7 +3,7 @@ package com.projects.alexanderauer.shooker.data;
 import android.net.Uri;
 
 /**
- * Created by Alex on 30.07.2017.
+ * Contract class for the Recipe table
  */
 
 public class RecipeContract {
@@ -44,17 +44,23 @@ public class RecipeContract {
 
         public static final String DEFAULT_SORT = TITLE + " ASC";
 
-        /** Matches: /items/ */
+        /**
+         * Matches: /recipes/
+         */
         public static Uri buildDirUri() {
             return RecipeProvider.BASE_URI.buildUpon().appendPath("recipes").build();
         }
 
-        /** Matches: /items/[_id]/ */
+        /**
+         * Matches: /recipes/[_id]/
+         */
         public static Uri buildItemUri(long _id) {
             return RecipeProvider.BASE_URI.buildUpon().appendPath("recipes").appendPath(Long.toString(_id)).build();
         }
 
-        /** Read item ID item detail URI. */
+        /**
+         * Read item ID item detail URI.
+         */
         public static long getItemId(Uri itemUri) {
             return Long.parseLong(itemUri.getPathSegments().get(1));
         }

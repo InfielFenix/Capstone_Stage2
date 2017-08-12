@@ -50,7 +50,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/default_view_margin"
         android:fitsSystemWindows="false"
         android:nestedScrollingEnabled="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -70,10 +70,10 @@
                     android:id="@+id/duration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/default_view_margin"
                     android:layout_weight="1"
                     android:drawableStart="@drawable/ic_timer_black_24dp"
-                    android:drawablePadding="8dp"
+                    android:drawablePadding="@dimen/default_view_margin"
                     android:gravity="center_vertical"
                     tools:text="x min" />
 

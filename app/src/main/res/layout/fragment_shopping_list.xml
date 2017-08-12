@@ -10,7 +10,7 @@
         android:id="@+id/shopping_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="50dp"
+        android:paddingBottom="@dimen/recipe_list_margin_bottom"
         android:visibility="visible" />
 
     <TextView

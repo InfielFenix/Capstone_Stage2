@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="@dimen/default_view_margin">
 
     <TextView
         android:id="@+id/id"
@@ -12,15 +12,14 @@
         android:visibility="gone"/>
 
     <android.support.design.widget.TextInputLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <EditText
             android:id="@+id/step"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Step"
+            android:hint="@string/step"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 

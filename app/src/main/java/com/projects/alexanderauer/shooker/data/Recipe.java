@@ -7,7 +7,10 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 /**
- * Created by Alex on 31.07.2017.
+ * Entity class for Recipes. It provides getter and setter for all attributes and
+ * a constructor which creates Recipes out of Cursor objects. It contains two ArrayLists
+ * containing the Ingredients and Steps of the recipe.
+ * Furthermore it implements the Parcelable interface to pass the objects between activities.
  */
 
 public class Recipe implements Parcelable {
@@ -33,6 +36,7 @@ public class Recipe implements Parcelable {
         this.steps = new ArrayList<>();
     }
 
+    // create Recipe out of a Cursor object
     public Recipe(Cursor cursor) {
         setId(cursor.getLong(RecipeLoader.Query._ID));
         setTitle(cursor.getString(RecipeLoader.Query.TITLE));

@@ -5,17 +5,18 @@ import android.content.CursorLoader;
 import android.net.Uri;
 
 /**
- * Created by Alex on 29.07.2017.
+ * CursorLoader for Step objects
  */
 
 public class StepLoader extends CursorLoader {
 
-    public static StepLoader StepForRecipeLoader(Context context, long recipeId) {
-        return new StepLoader(context, StepContract.Steps.buildDir4RecipeUri(recipeId));
-    }
-
     private StepLoader(Context context, Uri uri) {
         super(context, uri, Query.PROJECTION, null, null, StepContract.Steps.DEFAULT_SORT);
+    }
+
+    // method to load all Steps for a specific Recipe
+    public static StepLoader StepForRecipeLoader(Context context, long recipeId) {
+        return new StepLoader(context, StepContract.Steps.buildDir4RecipeUri(recipeId));
     }
 
     public interface Query {

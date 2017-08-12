@@ -5,7 +5,7 @@ import android.content.CursorLoader;
 import android.net.Uri;
 
 /**
- * Created by Alex on 29.07.2017.
+ * CursorLoader for Recipe objects
  */
 
 public class RecipeLoader extends CursorLoader {

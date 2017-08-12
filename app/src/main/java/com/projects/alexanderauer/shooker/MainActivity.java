@@ -36,6 +36,12 @@ import com.projects.alexanderauer.shooker.util.ShoppingListUtils;
 
 import java.util.ArrayList;
 
+/**
+ * The MainActivity contains a ViewPager containing two fragments, the list of Recipes and
+ * the shopping list.
+ * It uses a Loader to load recipes from a SQLite database.
+ */
+
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int RECIPE_LOADER_ID = 0,
@@ -59,13 +65,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
+
+        // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
@@ -78,8 +84,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 mShoppingList = savedInstanceState.getParcelableArrayList(SAVED_INSTANCE_SHOPPING_LIST);
 
             mViewPager.setAdapter(mSectionsPagerAdapter);
-        } else
+        } else {
+            // initialize the Loader which loads the Recipes
             getLoaderManager().initLoader(RECIPE_LOADER_ID, null, this);
+        }
     }
 
     @Override
@@ -99,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     public void onClickNewRecipe(View view) {
+        // start the intent which opens the Recipe detail activity
         Intent intent = new Intent(this, RecipeDetailActivity.class);
         startActivity(intent);
     }
@@ -107,8 +116,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
         switch (id) {
             case RECIPE_LOADER_ID:
+                // load all stored Recipes
                 return RecipeLoader.AllRecipesLoader(this);
             case INGREDIENT_LOADER_ID:
+                // load all Ingredients for a list of Recipes
                 return IngredientLoader.IngredientForRecipesLoader(this, bundle.getString(BUNDLE_EXTRA_RECIPE_IDS));
         }
 
@@ -124,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 try {
                     String shoppingListRecipesIds = "";
 
+                    // during the processing of the retrieved Cursor, we check if the Recipe
+                    // got added to the shopping list and build up a String of Recipe-Ids
                     while (cursor.moveToNext()) {
                         Recipe newRecipe = new Recipe(cursor);
 
@@ -135,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                         mRecipes.add(newRecipe);
                     }
 
+                    // load Ingredients in case there are Recipes in the shopping list
                     if (!shoppingListRecipesIds.equals("")) {
                         Bundle bundle = new Bundle();
                         bundle.putString(BUNDLE_EXTRA_RECIPE_IDS, "(" + shoppingListRecipesIds.substring(0, shoppingListRecipesIds.length() - 1) + ")");
@@ -149,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 mShoppingList = new ArrayList<>();
 
                 try {
+                    // process Cursor of Ingredients
                     while (cursor.moveToNext())
                         mShoppingList.add(new Ingredient(cursor));
 
@@ -160,11 +175,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 break;
         }
 
+        // refresh the ViewPager
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        // clear the lists
         mRecipes = new ArrayList<>();
         mShoppingList = new ArrayList<>();
     }
@@ -172,11 +189,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onRestart() {
         super.onRestart();
+
+        // clear lists and restart the Loader
         mRecipes = new ArrayList<>();
         mShoppingList = new ArrayList<>();
         getLoaderManager().restartLoader(RECIPE_LOADER_ID, null, this);
     }
 
+    /**
+     * Fragment that contains a ListView to display the Ingredient items
+     */
     public static class ShoppingListFragment extends Fragment {
 
         private TextView mEmptyView;
@@ -191,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             ListView shoppingList = shoppingListView.findViewById(R.id.shopping_list);
 
+            // start the share intent when pressing the share fab
             shoppingListView.findViewById(R.id.fab_share_shopping_list).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -203,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             mEmptyView = shoppingListView.findViewById(R.id.empty_view);
 
-            // set adapter for the grid items
+            // set adapter and set visibility
             if (mShoppingList != null && mShoppingList.size() > 0) {
                 shoppingList.setAdapter(new ShoppingListAdapter(getContext(), mShoppingList));
                 mEmptyView.setVisibility(View.GONE);
@@ -225,22 +248,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    /**
+     * Fragment that contains a GridView to display Recipes
+     */
     public static class RecipesFragment extends Fragment implements RecipeCardAdapter.OnRecipeItemClickListener {
 
         private RecyclerView mRecyclerView;
         private TextView mEmptyView;
 
         public RecipesFragment() {
-        }
-
-        public static RecipesFragment getInstance(Cursor recipesCursor) {
-            RecipesFragment recipesFragment = new RecipesFragment();
-
-//            Bundle args = new Bundle();
-//            args.put(ARG_RECIPES_CURSOR, recipesCursor);
-//            recipesFragment.setArguments(args);
-
-            return recipesFragment;
         }
 
         @Nullable
@@ -258,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             mRecyclerView.setLayoutManager(gridManager);
 
-            // set adapter for the grid items
+            // set adapter and visibility
             if (mRecipes != null && mRecipes.size() > 0) {
                 mRecyclerView.setAdapter(new RecipeCardAdapter(mRecipes, this));
                 mEmptyView.setVisibility(View.GONE);
@@ -273,6 +289,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         @Override
         public void onRecipeItemClick(Recipe recipe, ImageView recipePhoto) {
+            // start RecipeDetail activity when clicking on a Recipe
             Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
 
             intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE, recipe);
@@ -281,6 +298,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    /**
+     * Simple PagerAdapter for the ViewPager
+     * It creates instances of the RecipesFragment and the ShoppingListFragment
+     */
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         SectionsPagerAdapter(FragmentManager fm) {

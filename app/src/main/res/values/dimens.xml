@@ -20,4 +20,13 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="widget_title_text_size">18sp</dimen>
     <dimen name="widget_min_height">110dp</dimen>
     <dimen name="widget_min_width">180dp</dimen>
+    <dimen name="camera_image_height">84dp</dimen>
+    <dimen name="recipe_list_margin_bottom">56dp</dimen>
+    <dimen name="ingredient_list_item_height">72dp</dimen>
+    <dimen name="unit_spinner_width">110dp</dimen>
+    <dimen name="recipe_item_margin">4dp</dimen>
+    <dimen name="recipe_card_text_vertical_padding">8dp</dimen>
+    <dimen name="recipe_card_text_horizontal_padding">16dp</dimen>
+    <dimen name="recipe_card_icon_padding">8dp</dimen>
+    <dimen name="shopping_list_item_height">56dp</dimen>
 </resources>

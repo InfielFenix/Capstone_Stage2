@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -12,16 +11,15 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_recipe_edit"
+            style="@style/AppTheme.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            style="@style/AppTheme.Toolbar"
             app:layout_collapseMode="pin" />
 
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -48,7 +46,7 @@
                 <ImageView
                     android:id="@+id/camera_image"
                     android:layout_width="match_parent"
-                    android:layout_height="84dp"
+                    android:layout_height="@dimen/camera_image_height"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/make_a_picture"
                     android:src="@drawable/open_camera" />
@@ -81,7 +79,7 @@
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
@@ -97,10 +95,10 @@
                     android:id="@+id/difficulty"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="@dimen/default_view_margin"
+                    android:layout_marginLeft="@dimen/default_view_margin"
+                    android:layout_marginRight="@dimen/default_view_margin"
+                    android:layout_marginTop="@dimen/default_view_margin"
                     android:entries="@array/difficulty_values" />
             </LinearLayout>
 
@@ -116,12 +114,10 @@
 
             <LinearLayout
                 android:id="@+id/container_ingredients"
-                android:layout_width="368dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:orientation="vertical"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="0dp">
+                android:layout_margin="@dimen/default_view_margin"
+                android:orientation="vertical">
 
             </LinearLayout>
 
@@ -137,12 +133,10 @@
 
             <LinearLayout
                 android:id="@+id/container_steps"
-                android:layout_width="368dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:orientation="vertical"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="0dp">
+                android:layout_margin="@dimen/default_view_margin"
+                android:orientation="vertical">
 
             </LinearLayout>
 

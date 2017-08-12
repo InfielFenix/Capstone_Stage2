@@ -3,7 +3,7 @@ package com.projects.alexanderauer.shooker.data;
 import android.net.Uri;
 
 /**
- * Created by Alex on 30.07.2017.
+ * Contract class for the Step table
  */
 
 public class StepContract {
@@ -36,21 +36,31 @@ public class StepContract {
 
         public static final String DEFAULT_SORT = SEQUENCE + " ASC";
 
-        /** Matches: /items/ */
+        /**
+         * Matches: /steps/
+         */
         public static Uri buildDirUri() {
             return RecipeProvider.BASE_URI.buildUpon().appendPath("steps").build();
         }
 
-        /** Matches: /items/[_id]/ */
+        /**
+         * Matches: /steps/[_id]/
+         */
         public static Uri buildItemUri(long _id) {
             return RecipeProvider.BASE_URI.buildUpon().appendPath("steps").appendPath(Long.toString(_id)).build();
         }
 
-        public static Uri buildDir4RecipeUri(long recipeId){
+        /**
+         * Matches: /steps4recipe/[recipe_id]/
+         */
+        public static Uri buildDir4RecipeUri(long recipeId) {
+            // Uri to get all Steps for a specific Recipe
             return RecipeProvider.BASE_URI.buildUpon().appendPath("steps4recipe").appendPath(Long.toString(recipeId)).build();
         }
 
-        /** Read item ID item detail URI. */
+        /**
+         * Read item ID item detail URI.
+         */
         public static long getItemId(Uri itemUri) {
             return Long.parseLong(itemUri.getPathSegments().get(1));
         }

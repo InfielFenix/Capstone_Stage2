@@ -9,7 +9,7 @@ import android.widget.RemoteViews;
 import com.projects.alexanderauer.shooker.services.ShoppingListWidgetService;
 
 /**
- * Implementation of App Widget functionality.
+ * Implementation of Shooker Widget functionality.
  */
 public class ShookerShoppingListWidget extends AppWidgetProvider {
 

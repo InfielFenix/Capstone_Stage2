@@ -16,7 +16,7 @@ import com.projects.alexanderauer.shooker.util.ShoppingListUtils;
 import java.util.ArrayList;
 
 /**
- * Created by Alex on 09.08.2017.
+ * Class to create the single ListView items (Ingredients) for the widget
  */
 
 public class ShoppingListWidgetService extends RemoteViewsService {
@@ -42,7 +42,7 @@ class ShoppingListViewItemRemoteFactory implements RemoteViewsService.RemoteView
 
     @Override
     public void onDataSetChanged() {
-        // get all recipes in the shopping list
+        // query all Recipes in the shopping list
         Cursor cursor = mContext.getContentResolver().query(
                 RecipeContract.Recipes.buildDirUri(),
                 new String[]{RecipeContract.Recipes._ID},
@@ -54,6 +54,7 @@ class ShoppingListViewItemRemoteFactory implements RemoteViewsService.RemoteView
         if (cursor == null || cursor.getCount() == 0)
             return;
 
+        // build String of Recipe-Ids
         String recipeIds = "(";
         while (cursor.moveToNext()) {
             recipeIds += cursor.getLong(RecipeLoader.Query._ID) + ",";
@@ -62,6 +63,7 @@ class ShoppingListViewItemRemoteFactory implements RemoteViewsService.RemoteView
 
         cursor.close();
 
+        // query all Ingredients for the selected Recipes
         cursor = mContext.getContentResolver().query(
                 IngredientContract.Ingredients.buildDir4RecipesUri(recipeIds),
                 null,
@@ -74,6 +76,7 @@ class ShoppingListViewItemRemoteFactory implements RemoteViewsService.RemoteView
             mShoppingList.add(new Ingredient(cursor));
         }
 
+        // compress the shopping list (combine equal Ingredients)
         mShoppingList = ShoppingListUtils.compressShoppingList(mShoppingList);
 
         cursor.close();
@@ -91,6 +94,7 @@ class ShoppingListViewItemRemoteFactory implements RemoteViewsService.RemoteView
 
     @Override
     public RemoteViews getViewAt(int position) {
+        // fill RemoteView object with Ingredient data
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_shopping_list_item);
 
         Ingredient ingredient = mShoppingList.get(position);

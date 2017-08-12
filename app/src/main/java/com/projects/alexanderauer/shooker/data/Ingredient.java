@@ -5,7 +5,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by Alex on 04.08.2017.
+ * Entity class for Ingredients. It provides getter and setter for all attributes and
+ * a constructor which creates Ingredients out of Cursor objects.
+ * Furthermore it implements the Parcelable interface to pass the objects between activities.
  */
 
 public class Ingredient implements Parcelable{
@@ -28,6 +30,7 @@ public class Ingredient implements Parcelable{
         setIngredient(ingredient);
     }
 
+    // create Ingredient out of a Cursor object
     public Ingredient(Cursor cursor) {
         setId(cursor.getLong(IngredientLoader.Query._ID));
         setRecipeId(cursor.getLong(IngredientLoader.Query.RECIPE_ID));

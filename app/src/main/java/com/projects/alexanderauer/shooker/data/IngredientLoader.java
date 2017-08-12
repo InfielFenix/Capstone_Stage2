@@ -5,21 +5,23 @@ import android.content.CursorLoader;
 import android.net.Uri;
 
 /**
- * Created by Alex on 29.07.2017.
+ * CursorLoader for Ingredient objects
  */
 
 public class IngredientLoader extends CursorLoader {
 
+    private IngredientLoader(Context context, Uri uri) {
+        super(context, uri, Query.PROJECTION, null, null, IngredientContract.Ingredients.DEFAULT_SORT);
+    }
+
+    // method to load all Ingredients for a specific Recipe
     public static IngredientLoader IngredientForRecipeLoader(Context context, long recipeId) {
         return new IngredientLoader(context, IngredientContract.Ingredients.buildDir4RecipeUri(recipeId));
     }
 
+    // method to load all Ingredients for a list of Recipes (<recipe_id1>,<recipe_id2>,...,<recipe_idn>)
     public static IngredientLoader IngredientForRecipesLoader(Context context, String recipeIds) {
         return new IngredientLoader(context, IngredientContract.Ingredients.buildDir4RecipesUri(recipeIds));
-    }
-
-    private IngredientLoader(Context context, Uri uri) {
-        super(context, uri, Query.PROJECTION, null, null, IngredientContract.Ingredients.DEFAULT_SORT);
     }
 
     public interface Query {

@@ -5,11 +5,12 @@ import com.projects.alexanderauer.shooker.data.Ingredient;
 import java.util.ArrayList;
 
 /**
- * Created by Alex on 11.08.2017.
+ * Utility class to build the shopping list
  */
 
 public class ShoppingListUtils {
 
+    // compress shopping list: combine equal Ingredients and sum up their amounts
     public static ArrayList<Ingredient> compressShoppingList(ArrayList<Ingredient> shoppingList) {
 
         for (int i = 0; i < shoppingList.size(); i++) {
@@ -36,6 +37,7 @@ public class ShoppingListUtils {
         return shoppingList;
     }
 
+    // convert one unit to another
     private static double convertUnit(String fromUnit, String toUnit, double value) {
         if (fromUnit.equals("KG") && toUnit.equals("G") || fromUnit.equals("L") && toUnit.equals("ML"))
             return value * 1000;
@@ -45,6 +47,7 @@ public class ShoppingListUtils {
         return value;
     }
 
+    // check if unit conversion is possible at all
     private static boolean isUnitConvertible(String fromUnit, String toUnit) {
         return (fromUnit.equals("G") && toUnit.equals("KG") ||
                 fromUnit.equals("KG") && toUnit.equals("G") ||
@@ -52,6 +55,7 @@ public class ShoppingListUtils {
                 fromUnit.equals("L") && toUnit.equals("ML"));
     }
 
+    // make a String out of a shopping list (needed for sharing)
     public static String shoppingListToString(ArrayList<Ingredient> shoppingList) {
         String shoppingListString = "Shopping List:\n";
 

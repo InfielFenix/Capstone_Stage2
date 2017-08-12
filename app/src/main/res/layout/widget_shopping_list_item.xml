@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_height="@dimen/shopping_list_item_height"
     android:orientation="horizontal">
 
     <TextView
@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
+        android:layout_marginStart="@dimen/default_view_margin"
+        android:paddingEnd="@dimen/default_view_margin"
+        android:paddingStart="@dimen/default_view_margin"
         tools:text="Ingredient" />
 </LinearLayout>

@@ -1,10 +1,9 @@
 package com.projects.alexanderauer.shooker.data;
 
 import android.net.Uri;
-import android.os.StrictMode;
 
 /**
- * Created by Alex on 30.07.2017.
+ * Contract class for the Ingredient table
  */
 
 public class IngredientContract {
@@ -45,25 +44,39 @@ public class IngredientContract {
 
         public static final String DEFAULT_SORT = INGREDIENT + " ASC";
 
-        /** Matches: /items/ */
+        /**
+         * Matches: /ingredients/
+         */
         public static Uri buildDirUri() {
             return RecipeProvider.BASE_URI.buildUpon().appendPath("ingredients").build();
         }
 
-        /** Matches: /items/[_id]/ */
+        /**
+         * Matches: /ingredients/[_id]/
+         */
         public static Uri buildItemUri(long _id) {
             return RecipeProvider.BASE_URI.buildUpon().appendPath("ingredients").appendPath(Long.toString(_id)).build();
         }
 
-        public static Uri buildDir4RecipeUri(long recipeId){
+        /**
+         * Matches: /ingredients4recipe/[recipe_id]/
+         */
+        public static Uri buildDir4RecipeUri(long recipeId) {
+            // Uri to get all Ingredients for a specific Recipe
             return RecipeProvider.BASE_URI.buildUpon().appendPath("ingredients4recipe").appendPath(Long.toString(recipeId)).build();
         }
 
-        public static Uri buildDir4RecipesUri(String recipeIds){
+        /**
+         * Matches: /ingredients4recipes/[recipe_ids]/
+         */
+        public static Uri buildDir4RecipesUri(String recipeIds) {
+            // Uri to get all Ingredients for a list of Recipes
             return RecipeProvider.BASE_URI.buildUpon().appendPath("ingredients4recipes").appendPath(recipeIds).build();
         }
 
-        /** Read item ID item detail URI. */
+        /**
+         * Read item ID item detail URI.
+         */
         public static long getItemId(Uri itemUri) {
             return Long.parseLong(itemUri.getPathSegments().get(1));
         }

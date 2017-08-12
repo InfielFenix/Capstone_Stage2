@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
+    android:layout_margin="@dimen/recipe_item_margin"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?selectableItemBackground">
@@ -27,19 +27,19 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:paddingBottom="8dp"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
+            android:paddingBottom="@dimen/recipe_card_text_vertical_padding"
+            android:paddingEnd="@dimen/recipe_card_text_horizontal_padding"
+            android:paddingStart="@dimen/recipe_card_text_horizontal_padding"
+            android:paddingTop="@dimen/recipe_card_text_vertical_padding"
             tools:text="@string/recipe" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="16dp"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp">
+            android:paddingBottom="@dimen/recipe_card_text_horizontal_padding"
+            android:paddingEnd="@dimen/recipe_card_text_horizontal_padding"
+            android:paddingStart="@dimen/recipe_card_text_horizontal_padding">
 
             <TextView
                 android:id="@+id/duration"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawableStart="@drawable/ic_timer_black_24dp"
-                android:drawablePadding="8dp"
+                android:drawablePadding="@dimen/recipe_card_icon_padding"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
