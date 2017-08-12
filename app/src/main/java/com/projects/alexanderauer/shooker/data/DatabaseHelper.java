@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "shooker.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -34,7 +34,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + IngredientContract.IngredientColumns.RECIPE_ID + " INTEGER NOT NULL,"
                 + IngredientContract.IngredientColumns.AMOUNT + " REAL,"
                 + IngredientContract.IngredientColumns.UNIT + " TEXT,"
-                + IngredientContract.IngredientColumns.INGREDIENT + " TEXT NOT NULL)");
+                + IngredientContract.IngredientColumns.INGREDIENT + " TEXT NOT NULL,"
+                + IngredientContract.IngredientColumns.CHECKED + " INTEGER)");
 
         // create step table
         sqLiteDatabase.execSQL("CREATE TABLE " + RecipeProvider.Tables.STEPS + " ("

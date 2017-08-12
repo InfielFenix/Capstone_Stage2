@@ -31,8 +31,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements LoaderMan
 
     private Recipe mRecipe;
 
-    private RecipeEditFragment mRecipeEditFragment;
-
     private boolean ingredientsLoaded,
             stepsLoaded;
 
@@ -76,18 +74,14 @@ public class RecipeDetailActivity extends AppCompatActivity implements LoaderMan
     private void setCurrentFragment() {
         switch (mCurrentFragment) {
             case FRAGMENT_RECIPE_EDIT:
-                mRecipeEditFragment = RecipeEditFragment.newInstance(mRecipe);
-
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content, mRecipeEditFragment)
+                        .replace(R.id.content, RecipeEditFragment.newInstance(mRecipe))
                         .commit();
 
                 break;
             case FRAGMENT_RECIPE_DETAIL:
-                RecipeDetailFragment recipeDetailFragment = RecipeDetailFragment.newInstance(mRecipe);
-
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content, recipeDetailFragment)
+                        .replace(R.id.content, RecipeDetailFragment.newInstance(mRecipe))
                         .commit();
 
                 break;
@@ -238,8 +232,13 @@ public class RecipeDetailActivity extends AppCompatActivity implements LoaderMan
 
         Toast.makeText(this, R.string.recipe_saved, Toast.LENGTH_SHORT).show();
 
-        this.mCurrentFragment = FRAGMENT_RECIPE_DETAIL;
-        setCurrentFragment();
+        // do we come from the main activity or from the detail fragment?
+        if (recipe.getId() == 0)
+            onBackPressed();
+        else {
+            this.mCurrentFragment = FRAGMENT_RECIPE_DETAIL;
+            setCurrentFragment();
+        }
     }
 
     @Override

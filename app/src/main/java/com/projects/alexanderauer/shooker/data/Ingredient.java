@@ -34,6 +34,7 @@ public class Ingredient implements Parcelable{
         setAmount(cursor.getDouble(IngredientLoader.Query.AMOUNT));
         setUnit(cursor.getString(IngredientLoader.Query.UNIT));
         setIngredient(cursor.getString(IngredientLoader.Query.INGREDIENT));
+        setChecked(cursor.getInt(IngredientLoader.Query.CHECKED) == 1);
     }
 
     protected Ingredient(Parcel in) {

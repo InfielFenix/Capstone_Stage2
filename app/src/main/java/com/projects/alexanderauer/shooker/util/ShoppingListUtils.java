@@ -14,21 +14,21 @@ public class ShoppingListUtils {
 
         for (int i = 0; i < shoppingList.size(); i++) {
             Ingredient ingredient1 = shoppingList.get(i);
-            for (int j = i + 1; j < shoppingList.size();) {
+            for (int j = i + 1; j < shoppingList.size(); ) {
                 Ingredient ingredient2 = shoppingList.get(j);
 
                 if (ingredient2.getIngredient().trim().toLowerCase().equals(ingredient1.getIngredient().trim().toLowerCase())) {
                     if (ingredient2.getUnit().equals(ingredient1.getUnit())) {
                         ingredient1.setAmount(ingredient1.getAmount() + ingredient2.getAmount());
                         shoppingList.remove(j);
-                    } else if (isUnitConvertible(ingredient2.getUnit(), ingredient1.getUnit())){
+                    } else if (isUnitConvertible(ingredient2.getUnit(), ingredient1.getUnit())) {
                         ingredient1.setAmount(ingredient1.getAmount() +
-                                convertUnit(ingredient2.getUnit(),ingredient1.getUnit(),ingredient2.getAmount()));
+                                convertUnit(ingredient2.getUnit(), ingredient1.getUnit(), ingredient2.getAmount()));
                         shoppingList.remove(j);
-                    }else{
+                    } else {
                         j++;
                     }
-                }else
+                } else
                     j++;
             }
         }
@@ -50,6 +50,16 @@ public class ShoppingListUtils {
                 fromUnit.equals("KG") && toUnit.equals("G") ||
                 fromUnit.equals("ML") && toUnit.equals("L") ||
                 fromUnit.equals("L") && toUnit.equals("ML"));
+    }
+
+    public static String shoppingListToString(ArrayList<Ingredient> shoppingList) {
+        String shoppingListString = "Shopping List:\n";
+
+        for (Ingredient ingredient : shoppingList) {
+            shoppingListString += ingredient.getAmount() + " " + ingredient.getUnit() + " " + ingredient.getIngredient() + "\n";
+        }
+
+        return shoppingListString;
     }
 
 }

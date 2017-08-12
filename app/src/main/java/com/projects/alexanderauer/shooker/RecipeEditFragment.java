@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.projects.alexanderauer.shooker.data.Ingredient;
 import com.projects.alexanderauer.shooker.data.Recipe;
@@ -107,7 +108,9 @@ public class RecipeEditFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save: {
-                mRecipeSaveListener.onClickSaveRecipe(getData());
+                Recipe recipe = getData();
+                if (recipe != null)
+                    mRecipeSaveListener.onClickSaveRecipe(recipe);
                 return true;
             }
         }
@@ -192,9 +195,10 @@ public class RecipeEditFragment extends Fragment {
     }
 
     public Recipe getData() {
-        if (mTitle.getText().toString().equals(""))
+        if (mTitle.getText().toString().equals("")) {
+            Toast.makeText(getContext(), R.string.obligatory_field_check_message, Toast.LENGTH_SHORT).show();
             return null;
-        else {
+        } else {
             mRecipe.setTitle(mTitle.getText().toString());
             try {
                 mRecipe.setDuration(Integer.parseInt(mDuration.getText().toString()));
@@ -211,7 +215,7 @@ public class RecipeEditFragment extends Fragment {
                 Ingredient ingredient = new Ingredient();
 
                 String _id = ((TextView) child.findViewById(R.id.id)).getText().toString();
-                if(!_id.equals(""))
+                if (!_id.equals(""))
                     ingredient.setId(Long.valueOf(_id));
 
                 ingredient.setRecipeId(mRecipe.getId());
@@ -235,7 +239,7 @@ public class RecipeEditFragment extends Fragment {
                 Step step = new Step(((TextView) child.findViewById(R.id.step)).getText().toString());
 
                 String _id = ((TextView) child.findViewById(R.id.id)).getText().toString();
-                if(!_id.equals(""))
+                if (!_id.equals(""))
                     step.setId(Long.valueOf(_id));
 
                 step.setRecipeId(mRecipe.getId());

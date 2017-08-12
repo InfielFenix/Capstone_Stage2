@@ -28,7 +28,8 @@ public class IngredientLoader extends CursorLoader {
                 IngredientContract.Ingredients.RECIPE_ID,
                 IngredientContract.Ingredients.AMOUNT,
                 IngredientContract.Ingredients.UNIT,
-                IngredientContract.Ingredients.INGREDIENT
+                IngredientContract.Ingredients.INGREDIENT,
+                IngredientContract.Ingredients.CHECKED
         };
 
         int _ID = 0;
@@ -36,5 +37,6 @@ public class IngredientLoader extends CursorLoader {
         int AMOUNT = 2;
         int UNIT = 3;
         int INGREDIENT = 4;
+        int CHECKED = 5;
     }
 }

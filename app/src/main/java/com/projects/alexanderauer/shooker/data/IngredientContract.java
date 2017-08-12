@@ -1,6 +1,7 @@
 package com.projects.alexanderauer.shooker.data;
 
 import android.net.Uri;
+import android.os.StrictMode;
 
 /**
  * Created by Alex on 30.07.2017.
@@ -32,6 +33,10 @@ public class IngredientContract {
          * Type: TEXT NOT NULL
          */
         String INGREDIENT = "ingredient";
+        /**
+         * Type: INTEGER
+         */
+        String CHECKED = "checked";
     }
 
     public static class Ingredients implements IngredientColumns {

@@ -18,7 +18,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -88,21 +87,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_sort) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -195,6 +179,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static class ShoppingListFragment extends Fragment {
 
+        private TextView mEmptyView;
+
         public ShoppingListFragment() {
         }
 
@@ -210,19 +196,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 public void onClick(View view) {
                     startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
                             .setType("text/plain")
-                            .setText(getString(R.string.share_shopping_list))
+                            .setText(ShoppingListUtils.shoppingListToString(mShoppingList))
                             .getIntent(), getString(R.string.share_shopping_list)));
                 }
             });
 
+            mEmptyView = shoppingListView.findViewById(R.id.empty_view);
+
             // set adapter for the grid items
             if (mShoppingList != null && mShoppingList.size() > 0) {
                 shoppingList.setAdapter(new ShoppingListAdapter(getContext(), mShoppingList));
-                //mEmptyView.setVisibility(View.GONE);
+                mEmptyView.setVisibility(View.GONE);
                 shoppingList.setVisibility(View.VISIBLE);
             } else {
                 shoppingList.setVisibility(View.GONE);
-                //mEmptyView.setVisibility(View.VISIBLE);
+                mEmptyView.setVisibility(View.VISIBLE);
             }
 
             AdView mAdView = shoppingListView.findViewById(R.id.adView);
@@ -253,13 +241,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 //            recipesFragment.setArguments(args);
 
             return recipesFragment;
-        }
-
-        @Override
-        public void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            setSharedElementReturnTransition(null);
         }
 
         @Nullable
@@ -300,10 +281,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         SectionsPagerAdapter(FragmentManager fm) {

@@ -49,4 +49,6 @@
     <string name="recipe_deleted">Recipe successfully deleted</string>
     <string name="recipe_saved">Recipe successfully saved</string>
     <string name="shopping_list">Shooker Shopping List</string>
+    <string name="empty_shopping_list_text">Your Shopping List is empty… \n\nAdd Recipes to the Shopping Cart to fill it with Ingredients.</string>
+    <string name="obligatory_field_check_message">Please enter at least a Title!</string>
 </resources>

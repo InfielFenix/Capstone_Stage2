@@ -3,12 +3,14 @@ package com.projects.alexanderauer.shooker.services;
 import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
 
 import com.projects.alexanderauer.shooker.data.DatabaseHelper;
 import com.projects.alexanderauer.shooker.data.Ingredient;
 import com.projects.alexanderauer.shooker.data.IngredientContract;
+import com.projects.alexanderauer.shooker.data.IngredientLoader;
 import com.projects.alexanderauer.shooker.data.Recipe;
 import com.projects.alexanderauer.shooker.data.RecipeContract;
 import com.projects.alexanderauer.shooker.data.RecipeProvider;
@@ -281,7 +283,7 @@ public class RecipeOperationIntentService extends IntentService {
         contentValues.put(IngredientContract.Ingredients.AMOUNT, ingredient.getAmount());
         contentValues.put(IngredientContract.Ingredients.UNIT, ingredient.getUnit());
         contentValues.put(IngredientContract.Ingredients.INGREDIENT, ingredient.getIngredient());
-
+        contentValues.put(IngredientContract.Ingredients.CHECKED, ingredient.isChecked());
         return contentValues;
     }
 
