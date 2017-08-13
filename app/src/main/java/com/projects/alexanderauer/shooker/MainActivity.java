@@ -84,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 mShoppingList = savedInstanceState.getParcelableArrayList(SAVED_INSTANCE_SHOPPING_LIST);
 
             mViewPager.setAdapter(mSectionsPagerAdapter);
+
+            // initialize the Loader which loads the Recipes
+            getLoaderManager().restartLoader(RECIPE_LOADER_ID, null, this);
         } else {
             // initialize the Loader which loads the Recipes
             getLoaderManager().initLoader(RECIPE_LOADER_ID, null, this);

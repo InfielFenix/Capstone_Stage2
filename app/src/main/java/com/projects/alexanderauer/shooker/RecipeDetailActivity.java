@@ -27,8 +27,11 @@ public class RecipeDetailActivity extends AppCompatActivity implements LoaderMan
     public static final int FRAGMENT_RECIPE_EDIT = 0,
             FRAGMENT_RECIPE_DETAIL = 1;
     public static final String EXTRA_RECIPE = "recipe_extra",
+            EXTRA_TITLE = "title_extra",
             EXTRA_CURRENT_FRAGMENT = "current_fragment_extra";
     public static final String BUNDLE_EXTRA_RECIPE_ID = "recipe_id";
+    private static final String TAG_FRAGMENT_RECIPE_EDIT = "TAG_RECIPE_EDIT",
+            TAG_FRAGMENT_RECIPE_DETAIL = "TAG_RECIPE_DETAIL";
     private static final int INGREDIENT_LOADER_ID = 0,
             STEP_LOADER_ID = 1;
     private int mCurrentFragment = FRAGMENT_RECIPE_EDIT;
@@ -36,6 +39,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements LoaderMan
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private Recipe mRecipe;
+
+    private String mTitle = "";
 
     private boolean ingredientsLoaded,
             stepsLoaded;
@@ -55,6 +60,11 @@ public class RecipeDetailActivity extends AppCompatActivity implements LoaderMan
 
             if (savedInstanceState.containsKey(EXTRA_CURRENT_FRAGMENT))
                 mCurrentFragment = savedInstanceState.getInt(EXTRA_CURRENT_FRAGMENT);
+
+            if (savedInstanceState.containsKey(EXTRA_TITLE))
+                mTitle = savedInstanceState.getString(EXTRA_TITLE);
+
+            setCurrentFragment();
         } else if (getIntent().hasExtra(EXTRA_RECIPE)) {
             // get data from intent extras
             mRecipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
@@ -79,8 +89,13 @@ public class RecipeDetailActivity extends AppCompatActivity implements LoaderMan
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         // store recipe and current fragment
-        outState.putParcelable(EXTRA_RECIPE, mRecipe);
+        if (mCurrentFragment == FRAGMENT_RECIPE_EDIT)
+            outState.putParcelable(EXTRA_RECIPE, ((RecipeEditFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_RECIPE_EDIT)).getData());
+        else
+            outState.putParcelable(EXTRA_RECIPE, mRecipe);
+
         outState.putInt(EXTRA_CURRENT_FRAGMENT, mCurrentFragment);
+        outState.putString(EXTRA_TITLE,getTitle().toString());
 
         super.onSaveInstanceState(outState);
     }
@@ -89,13 +104,13 @@ public class RecipeDetailActivity extends AppCompatActivity implements LoaderMan
         switch (mCurrentFragment) {
             case FRAGMENT_RECIPE_EDIT:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content, RecipeEditFragment.newInstance(mRecipe))
+                        .replace(R.id.content, RecipeEditFragment.newInstance(mRecipe,mTitle), TAG_FRAGMENT_RECIPE_EDIT)
                         .commit();
 
                 break;
             case FRAGMENT_RECIPE_DETAIL:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content, RecipeDetailFragment.newInstance(mRecipe))
+                        .replace(R.id.content, RecipeDetailFragment.newInstance(mRecipe), TAG_FRAGMENT_RECIPE_DETAIL)
                         .commit();
 
                 break;

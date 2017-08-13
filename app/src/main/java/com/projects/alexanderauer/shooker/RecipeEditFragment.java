@@ -49,8 +49,13 @@ import static android.app.Activity.RESULT_OK;
  * create an instance of this fragment.
  */
 public class RecipeEditFragment extends Fragment {
+
+    public static final String EXTRA_RECIPE = "recipe_extra",
+            EXTRA_TITLE = "title_extra";
+
     // the fragment initialization parameters
-    private static final String ARG_RECIPE = "recipe";
+    private static final String ARG_RECIPE = "recipe",
+            ARG_TITLE = "title_argument";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private Recipe mRecipe;
@@ -73,10 +78,12 @@ public class RecipeEditFragment extends Fragment {
      * @param recipe Recipe Object.
      * @return A new instance of fragment RecipeEditFragment.
      */
-    public static RecipeEditFragment newInstance(@Nullable Recipe recipe) {
+    public static RecipeEditFragment newInstance(@Nullable Recipe recipe, String title) {
         RecipeEditFragment fragment = new RecipeEditFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_RECIPE, recipe);
+        if (!title.equals(""))
+            args.putString(ARG_TITLE, title);
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,16 +92,27 @@ public class RecipeEditFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mRecipe = getArguments().getParcelable(ARG_RECIPE);
-        }
+        if (savedInstanceState != null && savedInstanceState.containsKey(EXTRA_RECIPE)) {
+            mRecipe = savedInstanceState.getParcelable(EXTRA_RECIPE);
 
-        // set title depending on whether a Recipe got passed or not
-        if (mRecipe == null) {
-            mRecipe = new Recipe();
-            getActivity().setTitle(getString(R.string.create_recipe));
-        } else
-            getActivity().setTitle(getString(R.string.edit_recipe));
+            if (savedInstanceState.containsKey(EXTRA_TITLE))
+                getActivity().setTitle(savedInstanceState.getString(EXTRA_TITLE));
+        } else if (getArguments() != null && getArguments().containsKey(ARG_RECIPE)) {
+            mRecipe = getArguments().getParcelable(ARG_RECIPE);
+
+            // set Recipe
+            if (mRecipe == null) {
+                mRecipe = new Recipe();
+            }
+
+            // set Title
+            if (getArguments().containsKey(ARG_TITLE))
+                getActivity().setTitle(getArguments().getString(ARG_TITLE));
+            else if (mRecipe.getTitle() == null)
+                getActivity().setTitle(getString(R.string.create_recipe));
+            else
+                getActivity().setTitle(getString(R.string.edit_recipe));
+        }
 
         setHasOptionsMenu(true);
     }
@@ -111,6 +129,12 @@ public class RecipeEditFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save: {
+                // at least the title of the Recipe has to be filled
+                if (mTitle.getText().toString().equals("")) {
+                    Toast.makeText(getContext(), R.string.obligatory_field_check_message, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
                 // get the new Recipe data from the View elements
                 Recipe recipe = getData();
                 if (recipe != null)
@@ -121,6 +145,16 @@ public class RecipeEditFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // store Recipe
+        outState.putParcelable(EXTRA_RECIPE, getData());
+        //store title
+        outState.putString(EXTRA_TITLE, getActivity().getTitle().toString());
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -164,6 +198,9 @@ public class RecipeEditFragment extends Fragment {
         mStepContainer = recipeEditView.findViewById(R.id.container_steps);
 
         if (mRecipe != null) {
+            // store photo url
+            mCurrentPhotoPath = mRecipe.getPhotoUrl();
+
             // set title
             mTitle.setText(mRecipe.getTitle());
 
@@ -187,10 +224,14 @@ public class RecipeEditFragment extends Fragment {
                     .indexOf(mRecipe.getDifficulty()));
 
             // set ingredients
+            mIngredientContainer.removeAllViews();
+            mIngredientContainer.removeAllViewsInLayout();
             for (Ingredient ingredient : mRecipe.getIngredients())
                 mIngredientContainer.addView(ViewUtils.getIngredientItemViewFromIngredient(getContext(), ingredient));
 
             // set steps
+            mStepContainer.removeAllViews();
+            mStepContainer.removeAllViewsInLayout();
             for (Step step : mRecipe.getSteps())
                 mStepContainer.addView(ViewUtils.getStepItemViewFromStep(getContext(), step));
         }
@@ -203,79 +244,75 @@ public class RecipeEditFragment extends Fragment {
     }
 
     public Recipe getData() {
-        // at least the title of the Recipe has to be filled
-        if (mTitle.getText().toString().equals("")) {
-            Toast.makeText(getContext(), R.string.obligatory_field_check_message, Toast.LENGTH_SHORT).show();
-            return null;
-        } else {
-            // set title in the Recipe object
-            mRecipe.setTitle(mTitle.getText().toString());
+        // set photo url
+        mRecipe.setPhotoUrl(mCurrentPhotoPath);
+        // set title in the Recipe object
+        mRecipe.setTitle(mTitle.getText().toString());
+        try {
+            // set duration in the Recipe object
+            mRecipe.setDuration(Integer.parseInt(mDuration.getText().toString()));
+        } catch (NumberFormatException nfe) {
+            Log.w("NumberFormatException", nfe.getMessage());
+        }
+        // set difficulty in the Recipe object
+        mRecipe.setDifficulty(mDifficulty.getSelectedItem().toString());
+
+        // clear and add new ingredients
+        mRecipe.setIngredients(new ArrayList<Ingredient>());
+        for (int i = 0; i < mIngredientContainer.getChildCount(); i++) {
+            View child = mIngredientContainer.getChildAt(i);
+
+            Ingredient ingredient = new Ingredient();
+
+            // set id in the Ingredient object
+            String _id = ((TextView) child.findViewById(R.id.id)).getText().toString();
+            if (!_id.equals(""))
+                ingredient.setId(Long.valueOf(_id));
+
+            // set id of Recipe in the Ingredient object
+            ingredient.setRecipeId(mRecipe.getId());
             try {
-                // set duration in the Recipe object
-                mRecipe.setDuration(Integer.parseInt(mDuration.getText().toString()));
+                // set amount in the Ingredient object
+                ingredient.setAmount(Double.parseDouble(((TextView) child.findViewById(R.id.amount)).getText().toString()));
             } catch (NumberFormatException nfe) {
                 Log.w("NumberFormatException", nfe.getMessage());
             }
-            // set difficulty in the Recipe object
-            mRecipe.setDifficulty(mDifficulty.getSelectedItem().toString());
 
-            // clear and add new ingredients
-            mRecipe.setIngredients(new ArrayList<Ingredient>());
-            for (int i = 0; i < mIngredientContainer.getChildCount(); i++) {
-                View child = mIngredientContainer.getChildAt(i);
+            // set unit in the Ingredient object
+            ingredient.setUnit(((Spinner) child.findViewById(R.id.unit)).getSelectedItem().toString());
 
-                Ingredient ingredient = new Ingredient();
+            // set name in the Ingredient object
+            ingredient.setIngredient(((TextView) child.findViewById(R.id.ingredient)).getText().toString());
 
-                // set id in the Ingredient object
-                String _id = ((TextView) child.findViewById(R.id.id)).getText().toString();
-                if (!_id.equals(""))
-                    ingredient.setId(Long.valueOf(_id));
-
-                // set id of Recipe in the Ingredient object
-                ingredient.setRecipeId(mRecipe.getId());
-                try {
-                    // set amount in the Ingredient object
-                    ingredient.setAmount(Double.parseDouble(((TextView) child.findViewById(R.id.amount)).getText().toString()));
-                } catch (NumberFormatException nfe) {
-                    Log.w("NumberFormatException", nfe.getMessage());
-                }
-
-                // set unit in the Ingredient object
-                ingredient.setUnit(((Spinner) child.findViewById(R.id.unit)).getSelectedItem().toString());
-
-                // set name in the Ingredient object
-                ingredient.setIngredient(((TextView) child.findViewById(R.id.ingredient)).getText().toString());
-
-                // add only if amount and name are not empty
-                if (ingredient.getAmount() > 0 && !ingredient.getIngredient().equals(""))
-                    mRecipe.getIngredients().add(ingredient);
-            }
-
-            //clear and add new steps
-            mRecipe.setSteps(new ArrayList<Step>());
-            for (int i = 0; i < mStepContainer.getChildCount(); i++) {
-                View child = mStepContainer.getChildAt(i);
-
-                Step step = new Step(((TextView) child.findViewById(R.id.step)).getText().toString());
-
-                // set id in the Step object
-                String _id = ((TextView) child.findViewById(R.id.id)).getText().toString();
-                if (!_id.equals(""))
-                    step.setId(Long.valueOf(_id));
-
-                // set Recipe id in the Step object
-                step.setRecipeId(mRecipe.getId());
-
-                // set sequence number in the Step object
-                step.setSequence(i);
-
-                // add only if Step description is not empty
-                if (!step.getStep().equals(""))
-                    mRecipe.getSteps().add(step);
-            }
-
-            return mRecipe;
+            // add only if amount and name are not empty
+            if (ingredient.getAmount() > 0 && !ingredient.getIngredient().equals(""))
+                mRecipe.getIngredients().add(ingredient);
         }
+
+        //clear and add new steps
+        mRecipe.setSteps(new ArrayList<Step>());
+        for (int i = 0; i < mStepContainer.getChildCount(); i++) {
+            View child = mStepContainer.getChildAt(i);
+
+            Step step = new Step(((TextView) child.findViewById(R.id.step)).getText().toString());
+
+            // set id in the Step object
+            String _id = ((TextView) child.findViewById(R.id.id)).getText().toString();
+            if (!_id.equals(""))
+                step.setId(Long.valueOf(_id));
+
+            // set Recipe id in the Step object
+            step.setRecipeId(mRecipe.getId());
+
+            // set sequence number in the Step object
+            step.setSequence(i);
+
+            // add only if Step description is not empty
+            if (!step.getStep().equals(""))
+                mRecipe.getSteps().add(step);
+        }
+
+        return mRecipe;
     }
 
     /**
